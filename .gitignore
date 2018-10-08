@@ -13,3 +13,4 @@ yarn-error.log
 .env
 .env.example
 .phpunit.result.cache
+hist.out

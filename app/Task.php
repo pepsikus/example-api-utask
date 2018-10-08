@@ -13,6 +13,8 @@ class Task extends Model
      */
     protected $table = 'tasks';
 
+    protected $dates = ['completed_at'];
+
     /**
      * The attributes that are mass assignable.
      *

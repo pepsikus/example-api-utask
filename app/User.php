@@ -17,6 +17,8 @@ class User extends Authenticatable
      */
     protected $table = 'users';
 
+    protected $dates = ['email_verified_at'];
+
     /**
      * The attributes that are mass assignable.
      *
