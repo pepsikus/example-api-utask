@@ -37,7 +37,6 @@ class UserController extends Controller
         ]);
         $user = User::create($request->all());
 
-    //    return new UserResource($user);
         return (new UserResource($user))
             ->response()->setStatusCode(201);
     }

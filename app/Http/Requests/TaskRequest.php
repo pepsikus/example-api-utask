@@ -37,7 +37,7 @@ class TaskRequest extends FormRequest
         $fields = array_merge($fields, [
             'name' => $required . '|max:255',
             'description'  => $required . '|max:1024',
-            'completed_at' => $required . '|date'
+            'completed_at' => 'sometimes|date'
         ]);
 
         return $fields;

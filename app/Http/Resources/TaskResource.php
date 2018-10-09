@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\UserResource;
+use App\User;
 
 class TaskResource extends JsonResource
 {
@@ -16,17 +17,19 @@ class TaskResource extends JsonResource
     public function toArray($request)
     {
     //    return parent::toArray($request);
-        return [
+        $fields = [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-/*            'user' => [
-                'id' => $this->user->id,
-                'first_name' => $this->user->first_name,
-                'last_name' => $this->user->last_name,
-                'email' => $this->user->email,
-            ]*/
-            'user' => new UserResource($this->whenLoaded('user')),
+            'completed_at' => $this->completed_at ? date_format($this->completed_at,"Y-m-d H:i:s") : null,
         ];
+
+        if ($this->whenLoaded('user') instanceof User) {
+            $fields['user'] = new UserResource($this->whenLoaded('user'));
+        } else {
+            $fields['user_id'] = $this->user_id;
+        }
+
+        return $fields;
     }
 }
