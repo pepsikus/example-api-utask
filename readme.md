@@ -52,7 +52,7 @@ Available endpoints
 | DELETE    | api/tasks/{task}              | Delete task       | 204, empty                  |
 | PUT       | api/tasks/{task}/complete     | Complete task     | 200, Task JSON              |
 
-> [Full API Spec](https://github.com/pepsikus/example-api-utask/docs/api-specs.md)
+> [Full API Spec](https://github.com/pepsikus/example-api-utask/blob/master/docs/api-specs.md)
 
 
 ## Testing API
