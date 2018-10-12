@@ -13,29 +13,44 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('register', 'API\Auth\RegisterController@register');
+Route::post('login', 'API\Auth\LoginController@login');
+Route::post('logout', 'API\Auth\LoginController@logout');
+
+Route::get('login', function (Request $request) {
+    return response()->json(['error' => 'Unauthenticated'], 401);
 });
 
-Route::apiResources([
-    'users' => 'API\UserController',
-    'tasks' => 'API\TaskController',
-]);
+Route::get('unauthenticated', function (Request $request) {
+    return response()->json(['error' => 'Unauthenticated'], 401);
+})->name('api.unauthenticated');
 
-// Get all user tasks
-Route::get('users/{user}/tasks', [
-        'uses' => '\App\Http\Controllers\API\UserController@tasks',
-        'as' => 'users.tasks',
+Route::group(['middleware' => 'auth:api'], function() {
+
+    Route::get('user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::apiResources([
+        'users' => 'API\UserController',
+        'tasks' => 'API\TaskController',
     ]);
 
-// Verify user email
-Route::put('users/{user}/verify_email', [
-        'uses' => '\App\Http\Controllers\API\UserController@verifyEmail',
-        'as' => 'users.verify_email',
-    ]);
+    // Get all user tasks
+    Route::get('users/{user}/tasks', [
+            'uses' => '\App\Http\Controllers\API\UserController@tasks',
+            'as' => 'users.tasks',
+        ]);
 
-// Completing the task
-Route::put('tasks/{task}/complete', [
-        'uses' => '\App\Http\Controllers\API\TaskController@complete',
-        'as' => 'tasks.complete',
-    ]);
+    // Verify user email
+    Route::put('users/{user}/verify_email', [
+            'uses' => '\App\Http\Controllers\API\UserController@verifyEmail',
+            'as' => 'users.verify_email',
+        ]);
+
+    // Completing the task
+    Route::put('tasks/{task}/complete', [
+            'uses' => '\App\Http\Controllers\API\TaskController@complete',
+            'as' => 'tasks.complete',
+        ]);
+});

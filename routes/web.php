@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,8 +13,20 @@
 |
 */
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('login', function (Request $request) {
+    if ($request->expectsJson()) {
+        return response()->json(['error' => 'Unauthenticated'], 401);
+    } else {
+        // get LoginController
+    }
 });
 
 /*

@@ -1,7 +1,98 @@
 # API Specifications
 
+**NOTICE:**
+
+All endpoints requiring authentication can use one of these authentication methods:
+
+- use request header parameter `Authentication: Bearer {User api token}`
+- use `api_token` in URI query string (`?api_token={User api token}`)
+- use `api_token` in request body (in json: `{ "api_token": "{User api token}" }`)
+
+`api_token` should be get from 'Register'/'Sign In' endpoint responses
+<br>
+<br>
+
+
+## Table of contents:
+
+- [Authentication endpoints](#authentication)
 - [Users endpoints](#users)
 - [Tasks endpoints](#tasks)
+
+
+
+## Authentication
+
+### Register User
+
+`POST /api/register`
+
+Required fields: `first_name`, `last_name`, `email`, `password`, `password_confirmation`
+
+Example request body:
+```JSON
+{
+    "first_name": "Mikle",
+    "last_name": "Jackson",
+    "email": "mjackson@site.com",
+    "password": "secret",
+    "password_confirmation": "secret"
+}
+```
+
+Returns: code 201, JSON (example)
+```JSON
+{
+    "data": {
+        "id": 1,
+        "first_name": "Mikle",
+        "last_name": "Jackson",
+        "email": "mjackson@site.com",
+        "api_token": "usxsi2OL8hBzXSmLlHXrBFOGafRegRdY06nyW7RNnU6Lo6UyTCdtLAWPtr9g"
+    }
+}
+```
+
+### User sign in
+
+`POST /api/login`
+
+Required fields: `email`, `password`
+
+Example request body:
+```JSON
+{
+    "email": "mjackson@site.com",
+    "password": "secret",
+}
+```
+
+Returns: code 201, JSON (example)
+```JSON
+{
+    "data": {
+        "id": 1,
+        "first_name": "Mikle",
+        "last_name": "Jackson",
+        "email": "mjackson@site.com",
+        "api_token": "di2TTv6vSqxOemi8qnvwZFQOZZnKXp3v6r1hkTOjP12pXIXNhtMdfnTkcwEV"
+    }
+}
+```
+
+### User sign out
+
+`POST /api/logout`
+
+No parameters required
+<br>Authentication required
+
+Returns: code 201, JSON (example)
+```JSON
+{
+    "data": "User logged out"
+}
+```
 
 ## Users
 
@@ -10,6 +101,7 @@
 `GET /api/users`
 
 No parameters required
+<br>Authentication required
 
 Additional options: `page`
 
@@ -59,6 +151,7 @@ Returns: code 200, JSON (example)
 `POST /api/users`
 
 Required fields: `first_name`, `last_name`, `email`, `password`
+<br>Authentication required
 
 Example request body:
 ```JSON
@@ -87,6 +180,7 @@ Returns: code 201, JSON (example)
 `PUT /api/users/{user}`
 
 Optional fields: `first_name`, `last_name`
+<br>Authentication required
 
 Example request body:
 ```JSON
@@ -112,6 +206,7 @@ Returns: code 200, JSON (example)
 `DELETE /api/users/{user}`
 
 No parameters required
+<br>Authentication required
 
 Returns: code 204
 
@@ -121,6 +216,7 @@ Returns: code 204
 `PUT /api/users/{user}/verify_email`
 
 No parameters required
+<br>Authentication required
 
 Returns: code 200, JSON (example)
 ```JSON
@@ -139,6 +235,7 @@ Returns: code 200, JSON (example)
 `GET /api/users/{user}/tasks`
 
 No parameters required
+<br>Authentication required
 
 Returns: code 200, JSON (example)
 ```JSON
@@ -169,6 +266,7 @@ Returns: code 200, JSON (example)
 }
 ```
 
+<br>
 
 ## Tasks
 
@@ -177,6 +275,7 @@ Returns: code 200, JSON (example)
 `GET /api/tasks`
 
 No parameters required
+<br>Authentication required
 
 Additional options: `page`
 
@@ -268,6 +367,7 @@ Returns: code 200, JSON (example)
 `POST /api/task`
 
 Required fields: `name`, `desription`, `user_id`
+<br>Authentication required
 
 Example request body:
 ```JSON
@@ -296,6 +396,7 @@ Returns: code 201, JSON (example)
 `PUT /api/tasks/{task}`
 
 Optional fields: `name`, `description`
+<br>Authentication required
 
 Example request body:
 ```JSON
@@ -322,6 +423,7 @@ Returns: code 200, JSON (example)
 `DELETE /api/tasks/{task}`
 
 No parameters required
+<br>Authentication required
 
 Returns: code 204
 
@@ -331,6 +433,7 @@ Returns: code 204
 `PUT /api/tasks/{task}/complete`
 
 No parameters required
+<br>Authentication required
 
 Returns: code 200, JSON (example)
 ```JSON
@@ -348,6 +451,13 @@ Returns: code 200, JSON (example)
 ## Errors
 
 Possible error messages
+
+code 401
+```JSON
+{
+    "error": "Unauthenticated"
+}
+```
 
 code 404
 ```JSON

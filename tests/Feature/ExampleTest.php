@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Tests\TestCase;
 use Tests\WithHeaders;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,7 +25,12 @@ class ExampleTest extends TestCase
 
     public function test_test_wrong_URI()
     {
-        $response = $this->json('GET', '/api', [], $this->headers);
+        $user = request()->user() ?? factory(User::class)->create();
+        $token = $user->generateToken();
+
+        $headers = $this->headers + ['Authorization' => "Bearer $token"];
+
+        $response = $this->json('GET', '/api', [], $headers);
 
         $response->assertStatus(404)
             ->assertJson([

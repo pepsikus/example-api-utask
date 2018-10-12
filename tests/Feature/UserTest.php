@@ -19,14 +19,17 @@ class UserTest extends TestCase
      * test request
      * GET /api/users
      */
-    public function tests_user_list_is_retrieved()
+    public function test_user_list_is_retrieved()
     {
-        $headers = $this->headers;
+        $user = $this->createStubUser();
+        $token = $user->generateToken();
+
+        $headers = $this->headers /*+ ['Authorization' => "Bearer $token"]*/;
 
         $payload = [];
 
         // retrieve user list
-        $this->json('GET', '/api/users', $payload, $headers)
+        $this->actingAs($user, 'api')->json('GET', '/api/users', $payload, $headers)
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' =>
@@ -40,9 +43,12 @@ class UserTest extends TestCase
      * test request
      * POST /api/users
      */
-    public function tests_user_is_created()
+    public function test_user_is_created()
     {
-        $headers = $this->headers;
+        $user = $this->createStubUser();
+        $token = $user->generateToken();
+
+        $headers = $this->headers/* + ['Authorization' => "Bearer $token"]*/;
 
         $payload = [
             'first_name' => 'Mikle',
@@ -51,7 +57,7 @@ class UserTest extends TestCase
             'password' => 'ahahahha'
         ];
 
-        $this->json('POST', '/api/users', $payload, $headers)
+        $this->actingAs($user, 'api')->json('POST', '/api/users', $payload, $headers)
             ->assertStatus(201)
             ->assertJsonStructure([ 'data' =>
                 ['id', 'first_name', 'last_name', 'email']
@@ -63,30 +69,23 @@ class UserTest extends TestCase
      * GET /api/users/{user}
      * GET /api/users/{user}/tasks
      */
-    public function tests_user_and_user_tasks_is_retrieved()
+    public function test_user_and_user_tasks_is_retrieved()
     {
-    //    $user = $this->user;
-/*        $user = $this->createStubUser([
-            'first_name' => 'Billy',
-            'last_name' => 'Bones',
-            'email' => 'bill-bo@site.com',
-            'password' => 'ahahahha'
-        ]);
-*/
         $user = $this->createStubUser();
+        $token = $user->generateToken();
 
-        $headers = $this->headers;
+        $headers = $this->headers/* + ['Authorization' => "Bearer $token"]*/;
 
         $payload = [];
 
-        $this->json('GET', '/api/users/'.$user->id, $payload, $headers)
+        $this->actingAs($user, 'api')->json('GET', '/api/users/'.$user->id, $payload, $headers)
             ->assertStatus(200)
             ->assertJsonStructure([ 'data' =>
                 ['id', 'first_name', 'last_name', 'email']
             ]);
 
         // retrieve user tasks
-        $this->json('GET', '/api/users/'.$user->id.'/tasks', $payload, $headers)
+        $this->actingAs($user, 'api')->json('GET', '/api/users/'.$user->id.'/tasks', $payload, $headers)
             ->assertStatus(200)
             ->assertJsonStructure([ 'data' =>
                 [ '*' => ['id', 'name', 'description', 'completed_at'] ]
@@ -99,19 +98,19 @@ class UserTest extends TestCase
      * test request
      * PUT /api/users/{user}
      */
-    public function tests_user_is_updated()
+    public function test_user_is_updated()
     {
-    //    $user = $this->user;
         $user = $this->createStubUser();
+        $token = $user->generateToken();
 
-        $headers = $this->headers;
+        $headers = $this->headers/* + ['Authorization' => "Bearer $token"]*/;
 
         $payload = [
             'first_name' => 'John',
             'last_name' => 'Silver'
         ];
 
-        $this->json('PUT', '/api/users/'.$user->id, $payload, $headers)
+        $this->actingAs($user, 'api')->json('PUT', '/api/users/'.$user->id, $payload, $headers)
             ->assertStatus(200)
             ->assertJsonStructure([ 'data' =>
                 ['id', 'first_name', 'last_name', 'email']
@@ -124,16 +123,16 @@ class UserTest extends TestCase
      * test request
      * PUT /api/users/{user}/verify_email
      */
-    public function tests_user_email_is_verified()
+    public function test_user_email_is_verified()
     {
-    //    $user = $this->user;
         $user = $this->createStubUser();
+        $token = $user->generateToken();
 
-        $headers = $this->headers;
+        $headers = $this->headers/* + ['Authorization' => "Bearer $token"]*/;
 
         $payload = [];
 
-        $this->json('PUT', '/api/users/'.$user->id.'/verify_email', $payload, $headers)
+        $this->actingAs($user, 'api')->json('PUT', '/api/users/'.$user->id.'/verify_email', $payload, $headers)
             ->assertStatus(200)
             ->assertJsonStructure([ 'data' =>
                 ['id', 'first_name', 'last_name', 'email']
@@ -151,16 +150,16 @@ class UserTest extends TestCase
      * test request
      * DELETE /api/users/{user}
      */
-    public function tests_user_is_deleted()
+    public function test_user_is_deleted()
     {
-    //    $user = $this->user;
         $user = $this->createStubUser();
+        $token = $user->generateToken();
 
-        $headers = $this->headers;
+        $headers = $this->headers/* + ['Authorization' => "Bearer $token"]*/;
 
         $payload = [];
 
-        $this->json('DELETE', '/api/users/'.$user->id, $payload, $headers)
+        $this->actingAs($user, 'api')->json('DELETE', '/api/users/'.$user->id, $payload, $headers)
             ->assertStatus(204);
 
         $user = User::find($user->id);

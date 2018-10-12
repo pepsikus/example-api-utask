@@ -29,10 +29,13 @@ You can now access the server at http://localhost:8000
 
 Required request headers
 
-| **Required**  | **Key**               | **Value**             |
-|---------- |------------------ |------------------ |
-| Yes       | Content-Type      | application/json  |
-| Yes       | Accept            | application/json  |
+| **Required**  | **Key**               | **Value**         |
+|----------- |------------------ |-------------------------- |
+| Yes        | Content-Type      | application/json          |
+| Yes        | Accept            | application/json          |
+| Optional** | Authorization     | Bearer {User's api token} |
+
+ **It should be used for routes expecting authentication
 
 Available endpoints
 

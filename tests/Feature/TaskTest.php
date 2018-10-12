@@ -21,9 +21,12 @@ class TaskTest extends TestCase
      * test request
      * GET /api/tasks
      */
-    public function tests_task_list_is_retrieved()
+    public function test_task_list_is_retrieved()
     {
-        $headers = $this->headers;
+        $user = $this->createStubUser();
+        $token = $user->generateToken();
+
+        $headers = $this->headers + ['Authorization' => "Bearer $token"];
 
         $payload = [];
 
@@ -46,11 +49,12 @@ class TaskTest extends TestCase
      * test request
      * POST /api/tasks
      */
-    public function tests_task_is_created()
+    public function test_task_is_created()
     {
-        $headers = $this->headers;
+        $user = $this->createStubUser();
+        $token = $user->generateToken();
 
-        $user = factory(User::class)->create();
+        $headers = $this->headers + ['Authorization' => "Bearer $token"];
 
         $payload = [
             'name' => 'Lorem ipsum',
@@ -69,12 +73,14 @@ class TaskTest extends TestCase
      * test request
      * PUT /api/tasks/{task}
      */
-    public function tests_task_is_updated()
+    public function test_task_is_updated()
     {
-    //    $task = $this->task;
+        $user = $this->createStubUser();
+        $token = $user->generateToken();
+
         $task = $this->createStubTask();
 
-        $headers = $this->headers;
+        $headers = $this->headers + ['Authorization' => "Bearer $token"];
 
         $payload = [
             'name' => 'Ababagalamaga',
@@ -94,12 +100,14 @@ class TaskTest extends TestCase
      * test request
      * PUT /api/tasks/{task}/comlete
      */
-    public function tests_task_is_completed()
+    public function test_task_is_completed()
     {
-    //    $task = $this->task;
+        $user = $this->createStubUser();
+        $token = $user->generateToken();
+
         $task = $this->createStubTask();
 
-        $headers = $this->headers;
+        $headers = $this->headers + ['Authorization' => "Bearer $token"];
 
         $payload = [];
 
@@ -121,12 +129,14 @@ class TaskTest extends TestCase
      * test request
      * DELETE /api/tasks/{task}
      */
-    public function tests_task_is_deleted()
+    public function test_task_is_deleted()
     {
-    //    $task = $this->task;
+        $user = $this->createStubUser();
+        $token = $user->generateToken();
+
         $task = $this->createStubTask();
 
-        $headers = $this->headers;
+        $headers = $this->headers + ['Authorization' => "Bearer $token"];
 
         $payload = [];
 

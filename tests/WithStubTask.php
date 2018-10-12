@@ -30,7 +30,7 @@ trait WithStubTask
                 $data['user_id'] = $user->id;
 
             } else {
-                $user = factory(User::class)->create();
+                $user = $this->user ?? factory(User::class)->create();
 
                 $data['user_id'] = $user->id;
             }
@@ -40,7 +40,9 @@ trait WithStubTask
         } else {
         //    $this->task = factory(Task::class)->create();
             // to prevent ErrorException: Object of class Closure could not be converted to string
-            $this->task = factory(Task::class)->create(['user_id' => factory(User::class)->create()->id]);
+            // we must set user_id here
+            $user = $this->user ?? factory(User::class)->create();
+            $this->task = factory(Task::class)->create(['user_id' => $user->id]);
         }
 
         return $this->task;
